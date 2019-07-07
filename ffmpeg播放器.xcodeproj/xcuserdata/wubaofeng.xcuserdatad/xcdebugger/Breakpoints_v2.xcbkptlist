@@ -2,4 +2,87 @@
 <Bucket
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            scope = "0"
+            stopOnStyle = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.IDEConstraintErrorBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            breakpointStackSelectionBehavior = "1">
+            <Actions>
+               <BreakpointActionProxy
+                  ActionExtensionID = "Xcode.BreakpointAction.Log">
+                  <ActionContent
+                     message = "bad dst image pointers"
+                     conveyanceType = "0">
+                  </ActionContent>
+               </BreakpointActionProxy>
+            </Actions>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ffmpeg&#x64ad;&#x653e;&#x5668;/player.cpp"
+            timestampString = "584205445.258824"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "73"
+            endingLineNumber = "73"
+            landmarkName = "bf_sfp_refresh_thread(void *opaque)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ffmpeg&#x64ad;&#x653e;&#x5668;/player.cpp"
+            timestampString = "584205445.259631"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "75"
+            endingLineNumber = "75"
+            landmarkName = "bf_sfp_refresh_thread(void *opaque)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.SymbolicBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            symbolName = "SDL_WaitEvent"
+            moduleName = "">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SDL_WaitEvent"
+                  moduleName = "libSDL2-2.0.0.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  offsetFromSymbolStart = "0">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

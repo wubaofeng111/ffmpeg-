@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include "player.hpp"
+#include "SDLView.hpp"
 extern "C"
 {
 #include "avformat.h"
@@ -17,12 +18,12 @@ extern "C"
 
 char *outputFile = "/Users/wubaofeng/Desktop/my_github/ffmpeg播放器/ffmpeg播放器/videoinfo.txt";
 char *output264File = "/Users/wubaofeng/Desktop/my_github/ffmpeg播放器/ffmpeg播放器/videodata.h264";
-char *filePath   = "/Users/wubaofeng/Desktop/file1.mp4";
+char *filePath   = "/Users/wubaofeng/Desktop/file1.mov";
 
 int main(int argc, const char * argv[]) {
-   
+//    ShowWindow();
     bf_player(filePath, output264File);
-    player_main1(filePath);
+//    player_main1(filePath);
     
     return 0;
   

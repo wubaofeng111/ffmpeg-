@@ -56,6 +56,10 @@ extern "C"
 #endif
 
 
+#define SFM_REFRESH_EVENT  (SDL_USEREVENT + 1)
+int thread_exit=0;
+
+
 //Full Screen
 #define SHOW_FULLSCREEN 0
 //Output YUV420P
@@ -63,6 +67,18 @@ extern "C"
 
 typedef struct SDL_VideoInfo SDL_VideoInfo;
 typedef struct SDL_Overlay SDL_Overlay;
+
+int bf_sfp_refresh_thread(void *opaque)
+{
+    SDL_Event *event = (SDL_Event*)opaque;
+    while (thread_exit==0) {
+        event->type = SFM_REFRESH_EVENT;
+        SDL_PushEvent(event);
+        //Wait 40 ms
+        SDL_Delay(40);
+    }
+    return 0;
+}
 
 int bf_player(char * filePath,char *output264File)
 {
@@ -106,7 +122,8 @@ int bf_player(char * filePath,char *output264File)
     
     
     
-    AVPacket *pAVPacket = av_packet_alloc();
+    AVPacket* pAVPacket = (AVPacket*)av_malloc(sizeof(AVPacket));
+    av_init_packet(pAVPacket);
     
     AVStream *videoStream = pAVFormatContext->streams[0];
     
@@ -115,24 +132,85 @@ int bf_player(char * filePath,char *output264File)
     
     FILE* pFileH264 = fopen(output264File, "wb+");
     int yet,got_picture_ptr;
-    while (av_read_frame(pAVFormatContext, pAVPacket)>=0) {
-        if (pAVPacket->stream_index == 0) {
-            fwrite(pAVPacket->data, pAVPacket->size, 1, pFileH264);
-            printf("write frame");
-            yet = avcodec_decode_video2(pAVCodecContext, pAVFrame, &got_picture_ptr, pAVPacket);
-            
-            if (yet < 0) {
-                perror("解码错误");
-                return -1;
-            }
-            
-            
-            if (got_picture_ptr) {
-//                                sws_scale(pSwsContext, pAVFrame->data, <#const int *srcStride#>, <#int srcSliceY#>, <#int srcSliceH#>, <#uint8_t *const *dst#>, <#const int *dstStride#>)
-            }
-            
-        }
+    
+    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER)) {
+        printf( "Could not initialize SDL - %s\n", SDL_GetError());
+        return -1;
     }
+    
+    SDL_Window *pWindow;
+    SDL_Renderer *pRenderer;
+    SDL_Texture  *pTexture;
+    SDL_Rect     *pRect;
+    pRect = (SDL_Rect*)malloc(sizeof(SDL_Rect));
+    
+    pRect->x = 0;
+    pRect->y = 0;
+    pRect->w = pAVCodecContext->width;
+    pRect->h = pAVCodecContext->height;
+    
+    pWindow = SDL_CreateWindow("播放视频", 0, 0, pAVCodecContext->width, pAVCodecContext->height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+    pRenderer=SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED);
+    pTexture= SDL_CreateTexture(pRenderer, SDL_PIXELFORMAT_IYUV, SDL_TEXTUREACCESS_STREAMING, pAVCodecContext->width, pAVCodecContext->height);
+    
+    
+    int y_size=pAVCodecContext->width*pAVCodecContext->height;
+    int u_size=y_size/4;
+    int v_size=y_size/4;
+    
+    SDL_Event event;
+    
+    SDL_Thread*thread_id = SDL_CreateThread(bf_sfp_refresh_thread, "wbf", &event);
+    event.type = SFM_REFRESH_EVENT;
+    SDL_PushEvent(&event);
+    
+    while (1) {
+        SDL_WaitEvent(&event);
+        if (event.type == SFM_REFRESH_EVENT||event.type == 4352) {
+            while (av_read_frame(pAVFormatContext, pAVPacket)>=0) {
+                if (pAVPacket->stream_index == 0) {
+                    fwrite(pAVPacket->data, pAVPacket->size, 1, pFileH264);
+                    //            printf("write frame");
+                    yet = avcodec_decode_video2(pAVCodecContext, pAVFrame, &got_picture_ptr, pAVPacket);
+                    
+                    if (yet < 0) {
+                        perror("解码错误");
+                        return -1;
+                    }
+                    
+                    
+                    //            if (got_picture_ptr) {
+                    //                int sws_scale(struct SwsContext *c, const uint8_t *const srcSlice[],
+                    //                              const int srcStride[], int srcSliceY, int srcSliceH,
+                    //                              uint8_t *const dst[], const int dstStride[]);
+                    //                sws_scale(pSwsContext,
+                    //                          (const uint8_t* const*)pAVFrame->data, pAVFrame->linesize, 0, pAVCodecContext->height, pAVFrameYUV->data, pAVFrameYUV->linesize);
+                    //            }
+                    SDL_UpdateYUVTexture(pTexture, pRect, pAVFrame->data[0], pAVFrame->linesize[0], pAVFrame->data[1], pAVFrame->linesize[1], pAVFrame->data[2], pAVFrame->linesize[2]);
+                    SDL_RenderClear(pRenderer);
+                    SDL_RenderCopy(pRenderer,pTexture, NULL, pRect);
+                    SDL_RenderPresent(pRenderer);
+                    SDL_Delay(10);
+                    
+                }
+                av_free_packet(pAVPacket);
+            }
+        }else{
+            thread_exit = 1;
+            break;
+        }
+       
+    }
+    
+   
+    SDL_WaitEvent(NULL);
+    
+    SDL_DestroyTexture(pTexture);
+    SDL_DestroyRenderer(pRenderer);
+    SDL_DestroyWindow(pWindow);
+    SDL_Quit();
+    
+    printf("bf_player_结束\n");
     
     return 0;
 }
@@ -261,8 +339,8 @@ int player_main1(char* filePath)
 //                pFrameYUV->linesize[0]=bmp->pitches[0];
 //                pFrameYUV->linesize[1]=bmp->pitches[2];
 //                pFrameYUV->linesize[2]=bmp->pitches[1];
-//                sws_scale(img_convert_ctx, (const uint8_t* const*)pFrame->data, pFrame->linesize, 0,
-//                          pCodecCtx->height, pFrameYUV->data, pFrameYUV->linesize);
+                sws_scale(img_convert_ctx, (const uint8_t* const*)pFrame->data, pFrame->linesize, 0,
+                          pCodecCtx->height, pFrameYUV->data, pFrameYUV->linesize);
 //#if OUTPUT_YUV420P
 //                int y_size=pCodecCtx->width*pCodecCtx->height;
 //                fwrite(pFrameYUV->data[0],1,y_size,fp_yuv);    //Y
@@ -404,9 +482,8 @@ extern "C"
 #endif
 
 //Refresh
-#define SFM_REFRESH_EVENT  (SDL_USEREVENT + 1)
 
-int thread_exit=0;
+
 //Thread
 int sfp_refresh_thread(void *opaque)
 {

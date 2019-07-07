@@ -17,6 +17,7 @@
 		153CC1D022D1CFFB00B3B486 /* player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 153CC1CE22D1CFFB00B3B486 /* player.cpp */; };
 		153CC1D222D1D21300B3B486 /* libSDL2-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 153CC1D122D1D21300B3B486 /* libSDL2-2.0.0.dylib */; };
 		153CC1D422D1D25F00B3B486 /* libswscale.5.3.100.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 153CC1D322D1D25F00B3B486 /* libswscale.5.3.100.dylib */; };
+		155D8CEC22D23AF0001175C1 /* SDLView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 155D8CEA22D23AF0001175C1 /* SDLView.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -238,6 +239,8 @@
 		153CC1CF22D1CFFB00B3B486 /* player.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = player.hpp; sourceTree = "<group>"; };
 		153CC1D122D1D21300B3B486 /* libSDL2-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2-2.0.0.dylib"; path = "../../../../../usr/local/Cellar/sdl2/2.0.9/lib/libSDL2-2.0.0.dylib"; sourceTree = "<group>"; };
 		153CC1D322D1D25F00B3B486 /* libswscale.5.3.100.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswscale.5.3.100.dylib; path = ../../../../../usr/local/Cellar/ffmpeg/4.1_1/lib/libswscale.5.3.100.dylib; sourceTree = "<group>"; };
+		155D8CEA22D23AF0001175C1 /* SDLView.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SDLView.cpp; sourceTree = "<group>"; };
+		155D8CEB22D23AF0001175C1 /* SDLView.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SDLView.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -295,6 +298,8 @@
 				153CC0FE22D1AC4C00B3B486 /* libswresample */,
 				153CC10122D1AC4C00B3B486 /* libswscale */,
 				153CC0EF22D1AA7700B3B486 /* main.cpp */,
+				155D8CEA22D23AF0001175C1 /* SDLView.cpp */,
+				155D8CEB22D23AF0001175C1 /* SDLView.hpp */,
 				153CC1CE22D1CFFB00B3B486 /* player.cpp */,
 				153CC1CF22D1CFFB00B3B486 /* player.hpp */,
 			);
@@ -634,6 +639,7 @@
 			files = (
 				153CC1D022D1CFFB00B3B486 /* player.cpp in Sources */,
 				153CC0F022D1AA7700B3B486 /* main.cpp in Sources */,
+				155D8CEC22D23AF0001175C1 /* SDLView.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
