@@ -7,12 +7,23 @@
 //
 
 #include <iostream>
+#include "player.hpp"
 extern "C"
 {
-#include ""
+#include "avformat.h"
+#include "swscale.h"
+#include "SDL.h"
 };
+
+char *outputFile = "/Users/wubaofeng/Desktop/my_github/ffmpeg播放器/ffmpeg播放器/videoinfo.txt";
+char *output264File = "/Users/wubaofeng/Desktop/my_github/ffmpeg播放器/ffmpeg播放器/videodata.h264";
+char *filePath   = "/Users/wubaofeng/Desktop/file1.mp4";
+
 int main(int argc, const char * argv[]) {
+   
+    bf_player(filePath, output264File);
+    player_main1(filePath);
     
-    std::cout << "Hello, World!\n";
     return 0;
+  
 }
